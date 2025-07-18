@@ -86,11 +86,11 @@ defmodule CveApp.Security.CVE do
     if Map.has_key?(containers, "adp") || Map.has_key?(containers, "cna") do
       errors
     else
-      [{"json_file", "'containers' key in json file missing expected content"} | errors]
+      [{:json_file, "'containers' key in json file missing expected content"} | errors]
     end
   end
 
   @spec validate_containers_content(list(), term()) :: list()
   defp validate_containers_content(errors, _containers),
-    do: [{"json_file", "invalid value for json file key 'containers'"} | errors]
+    do: [{:json_file, "invalid value for json file key 'containers'"} | errors]
 end
