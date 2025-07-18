@@ -17,7 +17,8 @@ defmodule CveAppWeb.Router do
   scope "/", CveAppWeb do
     pipe_through :browser
 
-    get "/", PageController, :home
+    live "/", IndexLive, :index
+    live "/:id", IndexLive, :show
   end
 
   scope "/api", CveAppWeb do

@@ -3,3 +3,59 @@
 @import "tailwindcss/utilities";
 
 /* This file is for your main application CSS */
+@layer base {
+    @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 400;
+        src:
+            local("Manrope"),
+            url("https://fonts.cdnfonts.com/s/16243/manrope-regular.woff")
+                format("woff");
+    }
+    @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 100;
+        src:
+            local("Manrope"),
+            url("https://fonts.cdnfonts.com/s/16243/manrope-thin.woff")
+                format("woff");
+    }
+    @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 300;
+        src:
+            local("Manrope"),
+            url("https://fonts.cdnfonts.com/s/16243/manrope-light.woff")
+                format("woff");
+    }
+    @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 500;
+        src:
+            local("Manrope"),
+            url("https://fonts.cdnfonts.com/s/16243/manrope-medium.woff")
+                format("woff");
+    }
+    @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 600;
+        src:
+            local("Manrope"),
+            url("https://fonts.cdnfonts.com/s/16243/manrope-semibold.woff")
+                format("woff");
+    }
+    @font-face {
+        font-family: "Manrope";
+        font-style: normal;
+        font-weight: 700;
+        src:
+            local("Manrope"),
+            url("https://fonts.cdnfonts.com/s/16243/manrope-bold.woff")
+                format("woff");
+    }
+}
