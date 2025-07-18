@@ -45,8 +45,8 @@ defmodule CveApp.Security.CveTest do
       assert %Changeset{valid?: false} = changeset = CVE.changeset(%CVE{}, attributes)
 
       assert changeset.errors == [
-               {"json_file", {"invalid value for json file key 'data_type'", []}},
-               {"json_file", {"invalid value for json file key 'containers'", []}}
+               {:json_file, {"invalid value for json file key 'data_type'", []}},
+               {:json_file, {"invalid value for json file key 'containers'", []}}
              ]
     end
   end

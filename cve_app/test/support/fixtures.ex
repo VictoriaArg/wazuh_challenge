@@ -10,9 +10,9 @@ defmodule CveApp.Fixtures do
   def cve_attributes(attrs \\ %{}) do
     attrs
     |> Enum.into(%{
-      cve_id: "CVE-2025-47812",
+      cve_id: "CVE-2025-53624",
       title:
-        "Git GUI allows you to use the Git source control management tools via a GUI. A malicious repository can ship versions of sh.exe or typical textconv filter programs such as astextplain. Due to the unfortunate design of Tcl on Windows, the search path when looking for an executable always includes the current directory. The mentioned programs are invoked when the user selects Git Bash or Browse Files from the menu. This vulnerability is fixed in 2.43.7, 2.44.4, 2.45.4, 2.46.4, 2.47.3, 2.48.2, 2.49.1, and 2.50.1.",
+        "The Docusaurus gists plugin adds a page to your Docusaurus instance, displaying all public gists of a GitHub user. docusaurus-plugin-content-gists versions prior to 4.0.0 are vulnerable to exposing GitHub Personal Access Tokens in production build artifacts when passed through plugin configuration options. The token, intended for build-time API access only, is inadvertently included in client-side JavaScript bundles, making it accessible to anyone who can view the website's source code. This vulnerability is fixed in 4.0.0.",
       publication_date: DateTime.utc_now(),
       json_file: valid_json()
     })
