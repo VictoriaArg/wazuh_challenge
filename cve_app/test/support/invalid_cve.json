@@ -1,0 +1,13 @@
+{
+  "dataType": "DATA",
+  "containers": "not_a_map",
+  "cveMetadata": {
+    "cveId": "CVE-%la%-478abc",
+    "state": "PUBLISHED",
+    "dateUpdated": "2050-07-10T13:17:30Z",
+    "assignerOrgId": "a0819718-46f1-4df5-94e2-005712e83aaa",
+    "datePublished": "2050-07-09T21:15:27Z",
+    "assignerShortName": "GitHub_M"
+  },
+  "dataVersion": "5.0"
+}
