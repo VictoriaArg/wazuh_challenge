@@ -23,8 +23,8 @@ defmodule CveAppWeb.Router do
   scope "/api", CveAppWeb do
     pipe_through :api
 
-    get "/cves", API.CVEController, :index
-    get "/cves/:cve_id", API.CVEController, :show
+    get "/cves", API.Security.CVEController, :index
+    get "/cves/:cve_id", API.Security.CVEController, :show
   end
 
   # Enable LiveDashboard and Swoosh mailbox preview in development

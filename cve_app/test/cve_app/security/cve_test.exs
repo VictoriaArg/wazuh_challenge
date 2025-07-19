@@ -37,7 +37,7 @@ defmodule CveApp.Security.CveTest do
       assert changeset.errors == [publication_date: {"cannot be in the future", []}]
     end
 
-    test "validate that json_file has correct structure" do
+    test "validate that json_file has correct values" do
       json = invalid_json()
 
       attributes = cve_attributes(%{json_file: json})
@@ -45,8 +45,7 @@ defmodule CveApp.Security.CveTest do
       assert %Changeset{valid?: false} = changeset = CVE.changeset(%CVE{}, attributes)
 
       assert changeset.errors == [
-               {:json_file, {"invalid value for json file key 'data_type'", []}},
-               {:json_file, {"invalid value for json file key 'containers'", []}}
+               {:json_file, {"invalid value for json file key 'data_type'", []}}
              ]
     end
   end
