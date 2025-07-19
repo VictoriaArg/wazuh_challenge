@@ -54,6 +54,9 @@ defmodule CveAppWeb.IndexLive do
         [json] when is_map(json) ->
           {:ok, json}
 
+        [_content] ->
+          {:error, :invalid_content}
+
         [{:error, reason}] ->
           {:error, reason}
       end
@@ -82,6 +85,9 @@ defmodule CveAppWeb.IndexLive do
 
   defp validate_result({:error, :no_file}, socket),
     do: put_flash(socket, :error, "No file was uploaded.")
+
+  defp validate_result({:error, :invalid_content}, socket),
+    do: put_flash(socket, :error, "Uploaded file is not valid JSON.")
 
   defp validate_result({:error, {:invalid_json, _}}, socket),
     do: put_flash(socket, :error, "Uploaded file is not valid JSON.")
