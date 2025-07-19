@@ -4,7 +4,7 @@ defmodule CveApp.Fixtures do
   """
 
   @cve_json_file_path "test/support/valid_cve.json"
-  @cve_invalid_json_file_path "test/support/invalid_cve.json"
+  @cve_invalid_json_file_path "test/support/invalid_cve_changeset_errors.json"
 
   @spec cve_attributes(map()) :: map()
   def cve_attributes(attrs \\ %{}) do
