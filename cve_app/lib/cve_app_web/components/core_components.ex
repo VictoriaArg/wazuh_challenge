@@ -115,9 +115,9 @@ defmodule CveAppWeb.CoreComponents do
       phx-click={JS.push("lv:clear-flash", value: %{key: @kind}) |> hide("##{@id}")}
       role="alert"
       class={[
-        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1",
-        @kind == :info && "bg-emerald-50 text-emerald-800 ring-emerald-500 fill-cyan-900",
-        @kind == :error && "bg-rose-50 text-rose-900 shadow-md ring-rose-500 fill-rose-900"
+        "fixed top-2 right-2 mr-2 w-80 sm:w-96 z-50 rounded-lg p-3 ring-1 shadow-xl",
+        @kind == :info && "bg-emerald-50 text-wz-teal ring-wz-teal fill-wz-teal",
+        @kind == :error && "bg-rose-50 text-wz-red shadow-md ring-wz-red fill-zw-red"
       ]}
       {@rest}
     >
@@ -231,8 +231,8 @@ defmodule CveAppWeb.CoreComponents do
     <button
       type={@type}
       class={[
-        "phx-submit-loading:opacity-75 rounded-lg bg-zinc-900 hover:bg-zinc-700 py-2 px-3",
-        "text-sm font-semibold leading-6 text-white active:text-white/80",
+        "phx-submit-loading:opacity-70 rounded-lg py-2 px-3",
+        "text-sm font-semibold leading-6 text-white",
         @class
       ]}
       {@rest}

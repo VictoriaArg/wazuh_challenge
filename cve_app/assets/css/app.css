@@ -59,3 +59,7 @@
                 format("woff");
     }
 }
+
+input[name="json_file"] {
+    @apply font-light;
+}

@@ -1,25 +1,25 @@
-<header class="shadow-lg shadow-zinc-200 sticky top-0 h-16 p-4 px-8 w-full flex items-center justify-between">
-  <h1 class="text-lg">
+<header class="z-10 bg-white shadow-lg shadow-zinc-200 sticky top-0 h-16 p-4 px-8 w-full flex items-center justify-between">
+  <h1 class="text-sm lg:text-lg">
     Technical challenge for
     <.link navigate="https://wazuh.com/">
-      <p class="hover:underline underline-offset-4 underline-wz-blue inline">
+      <p class="hover:underline underline-offset-4 underline-wz-blue inline font-semibold">
         Wazuh
       </p>
       <p class="inline font-bold text-wz-blue -ml-1">.</p>
     </.link>
   </h1>
-  <h1>
+  <h1 class="text-sm lg:text-lg">
     Check the
     <.link
-      class="hover:underline hover:text-wz-orange underline-offset-4 underline-wz-blue inline"
+      class="hover:underline hover:text-wz-orange underline-offset-4 font-semibold inline"
       navigate="https://wazuh.com/"
     >
       Github Repo
     </.link>
   </h1>
 </header>
-<main class="px-4 py-20 sm:px-6 lg:px-8">
-  <div class="mx-auto max-w-2xl">
+<main class="px-4 py-16 sm:px-6 lg:px-8 min-h-screen">
+  <div class="mx-auto max-w-4xl">
     <.flash_group flash={@flash} />
     {@inner_content}
   </div>
