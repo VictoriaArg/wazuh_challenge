@@ -1,4 +1,4 @@
-defmodule CveAppWeb.API.CVEController do
+defmodule CveAppWeb.API.Security.CVEController do
   use CveAppWeb, :controller
 
   alias CveApp.Security.CVEManager
@@ -12,7 +12,7 @@ defmodule CveAppWeb.API.CVEController do
   curl -i http://localhost:4000/api/cves
   """
   def index(conn, _params) do
-    cves = CVEManager.list([:cve_id, :title])
+    cves = CVEManager.list([:cve_id, :publication_date])
 
     json(conn, cves)
   end
