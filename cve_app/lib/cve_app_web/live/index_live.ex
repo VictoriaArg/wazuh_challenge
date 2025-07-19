@@ -1,8 +1,8 @@
 defmodule CveAppWeb.IndexLive do
   use CveAppWeb, :live_view
 
-  # alias CveApp.Security.CVE
-  # alias CveApp.Security.CVEManager
+  alias CveApp.Security.CVE
+  alias CveApp.Security.CVEManager
 
   @impl true
   def mount(_params, _session, socket) do
@@ -28,9 +28,7 @@ defmodule CveAppWeb.IndexLive do
   @impl true
   def handle_event("save", _params, socket) do
     entries =
-      consume_uploaded_entries(socket, :json_file, fn %{path: path}, entry ->
-        IO.inspect(path, label: "ENTRy")
-
+      consume_uploaded_entries(socket, :json_file, fn %{path: path}, _entry ->
         with {:ok, content} <- File.read(path),
              {:ok, json} <- Jason.decode(content) do
           {:ok, json}
@@ -43,7 +41,7 @@ defmodule CveAppWeb.IndexLive do
         end
       end)
 
-    result =
+    file_consumption_result =
       case entries do
         [] ->
           {:error, :no_file}
@@ -55,27 +53,98 @@ defmodule CveAppWeb.IndexLive do
           {:error, reason}
       end
 
-    IO.inspect(entries, label: "ENTRIES")
-    IO.inspect(result, label: "RESULT")
-
-    socket =
-      case result do
-        {:ok, _json} ->
-          put_flash(socket, :info, "CVE uploaded successfully.")
-
-        {:error, :no_file} ->
-          put_flash(socket, :error, "No file was uploaded.")
-
-        {:error, {:invalid_json, _}} ->
-          put_flash(socket, :error, "Uploaded file is not valid JSON.")
-
-        {:error, {:file_read, _}} ->
-          put_flash(socket, :error, "Unable to read uploaded file.")
-
-        {:error, _} ->
-          put_flash(socket, :error, "An unknown error occurred during upload.")
-      end
-
-    {:noreply, socket}
+    {:noreply, validate_result(file_consumption_result, socket)}
   end
+
+  @spec validate_result(tuple(), Phoenix.Socket.t()) :: Phoenix.Socket.t()
+  defp validate_result({:ok, json}, socket) do
+    case cve_from_json(json) do
+      {:ok, %CVE{}} ->
+        ## ASSIGN NEW CV TO FUTURE TABLE SO IT REFRESHES
+        put_flash(socket, :info, "CVE uploaded successfully.")
+
+      {:error, %Ecto.Changeset{} = changeset} ->
+        errors = changeset_errors_to_string(changeset)
+        put_flash(socket, :error, errors)
+
+      {:error, {:invalid_json, _json}} = error ->
+        validate_result(error, socket)
+    end
+  end
+
+  defp validate_result({:error, :no_file}, socket),
+    do: put_flash(socket, :error, "No file was uploaded.")
+
+  defp validate_result({:error, {:invalid_json, _}}, socket),
+    do: put_flash(socket, :error, "Uploaded file is not valid JSON.")
+
+  defp validate_result({:error, {:file_read, _}}, socket),
+    do: put_flash(socket, :error, "Unable to read uploaded file.")
+
+  defp validate_result({:error, _}, socket),
+    do: put_flash(socket, :error, "An unknown error occurred during upload.")
+
+  @spec changeset_errors_to_string(Ecto.Changeset.t()) :: String.t()
+  defp changeset_errors_to_string(changeset) do
+    errors =
+      Ecto.Changeset.traverse_errors(changeset, fn {msg, opts} ->
+        Enum.reduce(opts, msg, fn {key, value}, acc ->
+          String.replace(acc, "%{#{key}}", to_string(value))
+        end)
+      end)
+      |> Enum.map(fn {field, messages} ->
+        Enum.map(messages, fn msg -> "#{field}: #{msg}" end)
+      end)
+      |> List.flatten()
+      |> Enum.join(", ")
+
+    "CVE not created, file with errors: " <> errors
+  end
+
+  @spec cve_from_json(map()) :: {:ok, CVE.t()} | {:error, term()}
+  def cve_from_json(json) do
+    with {:ok, params} <- pattern_match_params(json),
+         %Ecto.Changeset{valid?: true} <- CVE.changeset(%CVE{}, params) do
+      CVEManager.create(params)
+    else
+      %Ecto.Changeset{valid?: false} = changeset ->
+        {:error, changeset}
+
+      {:error, {:invalid_json, _json}} = error ->
+        error
+    end
+  end
+
+  @spec pattern_match_params(map()) :: {:ok, map()} | {:error, term()}
+  defp pattern_match_params(
+         %{
+           "containers" => %{
+             "cna" => %{
+               "descriptions" => descriptions
+             }
+           },
+           "cveMetadata" => %{
+             "cveId" => cve_id,
+             "datePublished" => publication_date
+           }
+         } = json
+       )
+       when is_list(descriptions) do
+    title =
+      Enum.find_value(descriptions, fn
+        %{"lang" => "en", "value" => value} -> value
+        _ -> nil
+      end)
+
+    {:ok,
+     %{
+       title: title,
+       cve_id: cve_id,
+       publication_date: publication_date,
+       json_file: json
+     }}
+  end
+
+  defp pattern_match_params(json),
+    do: {:error, {:invalid_json, json}}
 end
