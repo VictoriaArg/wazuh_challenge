@@ -1,4 +1,4 @@
-defmodule CveAppWeb.API.CVEControllerTest do
+defmodule CveAppWeb.API.Security.CVEControllerTest do
   use CveAppWeb.ConnCase, async: true
 
   import CveApp.Fixtures
