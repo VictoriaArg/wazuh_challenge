@@ -9,6 +9,13 @@ defmodule CveApp.MixProject do
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
+      test_coverage: [tool: ExCoveralls],
+      preferred_cli_env: [
+        coveralls: :test,
+        "coveralls.detail": :test,
+        "coveralls.post": :test,
+        "coveralls.html": :test
+      ],
       deps: deps()
     ]
   end
@@ -57,7 +64,8 @@ defmodule CveApp.MixProject do
       {:gettext, "~> 0.26"},
       {:jason, "~> 1.2"},
       {:dns_cluster, "~> 0.1.1"},
-      {:bandit, "~> 1.5"}
+      {:bandit, "~> 1.5"},
+      {:excoveralls, "~> 0.18", only: :test}
     ]
   end
 
