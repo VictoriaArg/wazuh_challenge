@@ -12,14 +12,7 @@ defmodule CveAppWeb.API.CVEController do
   curl -i http://localhost:4000/api/cves
   """
   def index(conn, _params) do
-    cves =
-      CVEManager.list()
-      |> Enum.map(fn cve ->
-        %{
-          "cve_id" => cve.cve_id,
-          "publication_date" => DateTime.to_iso8601(cve.publication_date)
-        }
-      end)
+    cves = CVEManager.list([:cve_id, :title])
 
     json(conn, cves)
   end

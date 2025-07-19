@@ -93,8 +93,8 @@ defmodule CveApp.Security.CVEManagerTest do
         )
         |> CVEManager.create()
 
-      assert {:ok, %CVE{} = _older} = older
-      assert {:ok, %CVE{} = _newer} = newer
+      assert {:ok, %CVE{}} = older
+      assert {:ok, %CVE{}} = newer
 
       :ok
     end
@@ -104,6 +104,24 @@ defmodule CveApp.Security.CVEManagerTest do
       assert first.publication_date > second.publication_date
       assert first.cve_id == "CVE-2025-2000"
       assert second.cve_id == "CVE-2025-1000"
+    end
+
+    test "returns an empty list when given an empty list" do
+      assert CVEManager.list([]) == []
+    end
+
+    test "returns selected fields when valid fields are passed" do
+      results = CVEManager.list([:id, :cve_id])
+      assert is_list(results)
+      assert Enum.all?(results, &match?(%{id: _, cve_id: _}, &1))
+    end
+
+    test "returns error when an invalid field is passed" do
+      assert CVEManager.list([:nonexistent_field]) == {:error, "not valid fields"}
+    end
+
+    test "returns error when at least one invalid field is passed" do
+      assert CVEManager.list([:id, :cve_id, :bad]) == {:error, "not valid fields"}
     end
   end
 end

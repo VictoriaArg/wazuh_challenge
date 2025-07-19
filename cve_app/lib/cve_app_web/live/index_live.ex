@@ -4,6 +4,8 @@ defmodule CveAppWeb.IndexLive do
   alias CveApp.Security.CVE
   alias CveApp.Security.CVEManager
 
+  @expected_cve_information [:cve_id, :title]
+
   @impl true
   def mount(_params, _session, socket) do
     socket =
@@ -13,9 +15,12 @@ defmodule CveAppWeb.IndexLive do
         max_file_size: 2_000_000
       )
 
+    cves = CVEManager.list(@expected_cve_information)
+
     mounted_socket =
       socket
       |> assign(:upload_error, nil)
+      |> assign(:cves, cves)
 
     {:ok, mounted_socket}
   end
@@ -60,8 +65,11 @@ defmodule CveAppWeb.IndexLive do
   defp validate_result({:ok, json}, socket) do
     case cve_from_json(json) do
       {:ok, %CVE{}} ->
-        ## ASSIGN NEW CV TO FUTURE TABLE SO IT REFRESHES
-        put_flash(socket, :info, "CVE uploaded successfully.")
+        updated_cves_list = CVEManager.list(@expected_cve_information)
+
+        socket
+        |> assign(:cves, updated_cves_list)
+        |> put_flash(:info, "CVE uploaded successfully.")
 
       {:error, %Ecto.Changeset{} = changeset} ->
         errors = changeset_errors_to_string(changeset)
